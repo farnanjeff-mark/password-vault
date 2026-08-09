@@ -86,21 +86,24 @@
     .toolbar { flex-direction: column; }
     .row-main { flex-direction: column; gap: 2px; }
 
-    body { font-size: 17px; }
-    label { font-size: 15px; }
-    input, textarea { font-size: 17px; padding: 13px 14px; }
-    button { font-size: 16px; padding: 13px 20px; }
-    .mark { font-size: 17px; }
-    .auth-card h1 { font-size: 30px; }
-    .auth-sub { font-size: 16px; }
-    .user-email { font-size: 15px; }
-    .search { font-size: 17px; }
-    .row-name { font-size: 17px; }
-    .row-owner { font-size: 15px; }
-    .pw-text { font-size: 16px; }
-    .row-notes { font-size: 15px; }
-    .icon-btn { font-size: 14px; padding: 8px 14px; }
-    .link-btn { font-size: 15px; }
+    body { font-size: 22px; }
+    label { font-size: 20px; margin: 10px 0 4px; }
+    input, textarea { font-size: 22px; padding: 8px 10px; }
+    button { font-size: 21px; padding: 8px 14px; }
+    .mark { font-size: 22px; }
+    .auth-card h1 { font-size: 36px; }
+    .auth-sub { font-size: 20px; }
+    .user-email { font-size: 19px; }
+    .search { font-size: 22px; }
+    .row-name { font-size: 22px; }
+    .row-owner { font-size: 19px; }
+    .pw-text { font-size: 21px; }
+    .row-notes { font-size: 19px; }
+    .icon-btn { font-size: 18px; padding: 5px 10px; }
+    .link-btn { font-size: 19px; }
+    .auth-card { padding: 20px 16px; }
+    .row { padding: 10px 12px; }
+    .form-card { padding: 14px 12px; }
   }
   [hidden] { display: none !important; }
 </style>
@@ -371,7 +374,6 @@
     filtered.forEach((entry) => {
       const row = document.getElementById(`row-${entry.id}`);
       const showBtn = row.querySelector('.show-btn');
-      const copyBtn = row.querySelector('.copy-btn');
       const pwText = row.querySelector('.pw-text');
       let revealed = false;
 
@@ -379,14 +381,6 @@
         revealed = !revealed;
         pwText.textContent = revealed ? entry.password : '••••••••';
         showBtn.textContent = revealed ? 'Hide' : 'Show';
-      });
-
-      copyBtn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(entry.password);
-          copyBtn.textContent = 'Copied';
-          setTimeout(() => (copyBtn.textContent = 'Copy'), 1500);
-        } catch (e) {}
       });
 
       row.querySelector('.edit-btn').addEventListener('click', () => openForm(entry));
@@ -404,13 +398,10 @@
         <div class="row-password">
           <span class="pw-text">••••••••</span>
           <button type="button" class="icon-btn show-btn">Show</button>
-          <button type="button" class="icon-btn copy-btn">Copy</button>
-        </div>
-        ${entry.notes ? `<div class="row-notes">${escapeHtml(entry.notes)}</div>` : ''}
-        <div class="row-actions">
           <button type="button" class="icon-btn edit-btn">Edit</button>
           <button type="button" class="icon-btn danger delete-btn">Delete</button>
         </div>
+        ${entry.notes ? `<div class="row-notes">${escapeHtml(entry.notes)}</div>` : ''}
       </div>
     `;
   }
