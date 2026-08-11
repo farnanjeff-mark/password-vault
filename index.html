@@ -14,8 +14,7 @@
 
 <title>Vault</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap');
-
+  
   :root {
     --bg: #d9c9a3; --surface: #efe6cb; --surface-raised: #f6f0dd;
     --border: #b8a67d; --text: #2a2013; --text-dim: #6b5d42;
@@ -25,7 +24,7 @@
   html, body { height: 100%; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
-    font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+    font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased;
   }
   button {
     font-family: inherit; cursor: pointer; border: none; border-radius: 8px;
@@ -56,8 +55,8 @@
 
   .auth-screen { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 24px; padding-top: 14vh; }
   .auth-card { width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 28px; }
-  .mark { font-family: 'Fraunces', serif; font-weight: 600; font-size: 15px; letter-spacing: 0.28em; color: var(--accent); margin-bottom: 18px; }
-  .auth-card h1 { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; margin: 0 0 6px; }
+  .mark { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.28em; color: var(--accent); margin-bottom: 18px; }
+  .auth-card h1 { font-family: Arial, Helvetica, sans-serif; font-size: 26px; font-weight: 500; margin: 0 0 6px; }
   .auth-sub { color: var(--text-dim); font-size: 14px; margin: 0; line-height: 1.5; }
   .auth-card button[type='submit'] { width: 100%; margin-top: 20px; padding: 12px; }
 
@@ -73,8 +72,10 @@
   .row-name { font-weight: 600; font-size: 15px; }
   .row-owner { color: var(--text-dim); font-size: 13px; }
   .row-password { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .row-password .pw-text { order: 1; }
+  .row-password .btn-stack { order: 2; }
   .btn-stack { display: flex; gap: 8px; }
-  .pw-text { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.03em; color: var(--accent); flex: 1; overflow-wrap: anywhere; }
+  .pw-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; letter-spacing: 0.03em; color: var(--accent); flex: 1; overflow-wrap: anywhere; }
   .row-notes { margin-top: 10px; font-size: 13px; color: var(--text-dim); white-space: pre-wrap; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 10px; }
   .row-actions { display: flex; gap: 8px; margin-top: 12px; }
   .icon-btn { background: var(--surface-raised); color: var(--text-dim); border: 1px solid var(--border); padding: 6px 12px; font-size: 12px; font-weight: 500; }
@@ -106,8 +107,6 @@
     .row { padding: 10px 12px; }
     .form-card { padding: 14px 12px; }
     .row-password { align-items: flex-start; }
-    .row-password .pw-text { order: 1; flex: 1; }
-    .row-password .btn-stack { order: 2; }
     .btn-stack { display: flex; flex-direction: column; gap: 6px; }
     .btn-stack .icon-btn { width: 84px; text-align: center; }
   }
@@ -153,7 +152,7 @@
 
   <div id="formView" hidden>
     <div class="form-card">
-      <h3 id="formTitle" style="margin-top:0;font-family:'Fraunces',serif;font-weight:500;"></h3>
+      <h3 id="formTitle" style="margin-top:0;font-family:Arial,Helvetica,sans-serif;font-weight:500;"></h3>
       <form id="entryForm">
         <label for="f-owner">Owner</label>
         <select id="f-owner">
@@ -418,16 +417,6 @@
 
     filtered.forEach((entry) => {
       const row = document.getElementById(`row-${entry.id}`);
-      const showBtn = row.querySelector('.show-btn');
-      const pwText = row.querySelector('.pw-text');
-      let revealed = false;
-
-      showBtn.addEventListener('click', () => {
-        revealed = !revealed;
-        pwText.textContent = revealed ? entry.password : '••••••••';
-        showBtn.textContent = revealed ? 'Hide' : 'Show';
-      });
-
       row.querySelector('.edit-btn').addEventListener('click', () => openForm(entry));
       row.querySelector('.delete-btn').addEventListener('click', () => deleteEntry(entry.id));
     });
@@ -442,13 +431,11 @@
         </div>
         <div class="row-password">
           <div class="btn-stack">
-            <button type="button" class="icon-btn show-btn">Show</button>
             <button type="button" class="icon-btn edit-btn">Edit</button>
             <button type="button" class="icon-btn danger delete-btn">Delete</button>
           </div>
-          <span class="pw-text">••••••••</span>
+          <span class="pw-text">${entry.username ? escapeHtml(entry.username) + ' &middot; ' : ''}${escapeHtml(entry.password)}</span>
         </div>
-        ${entry.username ? `<div class="row-notes">Username: ${escapeHtml(entry.username)}</div>` : ''}
         ${entry.notes ? `<div class="row-notes">${escapeHtml(entry.notes)}</div>` : ''}
       </div>
     `;
